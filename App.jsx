@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 const ACCENT = "#FF4500";
 const DARK = "#0A0A0A";
 const CARD = "#141414";
@@ -37,7 +37,6 @@ export default function ResumeRoaster() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("roast");
-  const [copied, setCopied] = useState(false);
   const [plan, setPlan] = useState("basic");
   const roast = async () => {
     if (!resumeText.trim()) { setError("Please paste your resume text first."); return; }
@@ -46,7 +45,7 @@ export default function ResumeRoaster() {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": "Bearer " + import.meta.env.VITE_GROQ_KEY },
-        body: JSON.stringify({ model: "llama3-70b-8192", max_tokens: 2000, messages: [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: "Analyze this resume. Plan: " + plan + "\n\n" + resumeText.slice(0, 4000) }] }),
+        body: JSON.stringify({ model: "llama-3.3-70b-versatile", max_tokens: 2000, messages: [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: "Analyze this resume. Plan: " + plan + "\n\n" + resumeText.slice(0, 4000) }] }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error?.message || "API error");
@@ -103,4 +102,4 @@ export default function ResumeRoaster() {
       <footer style={styles.footer}>RESUME ROASTER · AI-POWERED · {new Date().getFullYear()}</footer>
     </div>
   );
-                     }
+             }
